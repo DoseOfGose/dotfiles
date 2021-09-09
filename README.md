@@ -11,7 +11,7 @@
 
 # dotfiles
 
-A _Work in Progress_™️.
+A _Work in Progress_ ™️.
 
 Initial collection of doseofgose's personal dotfiles.  See the [Issues tab](https://github.com/DoseOfGose/dotfiles/issues) for planned work to enhance this collection's content and workflows.
 
