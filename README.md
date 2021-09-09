@@ -11,7 +11,9 @@
 
 # dotfiles
 
-Initial collection of doseofgose's personal dotfiles.  This project and documentation will go through numerous changes before repo is made public.
+A _Work in Progress_™️.
+
+Initial collection of doseofgose's personal dotfiles.  See the [Issues tab](https://github.com/DoseOfGose/dotfiles/issues) for planned work to enhance this collection's content and workflows.
 
 ## Installation
 
@@ -26,7 +28,7 @@ cp gitconfig ~/.gitconfig
 cp tmux-conf ~/.tmux-conf
 ```
 
-## Target Applications
+## Current Applications
 
 The following applications have configuration files in this repo:
 - Bash
