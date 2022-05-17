@@ -28,6 +28,8 @@ cp gitconfig ~/.gitconfig
 cp tmux-conf ~/.tmux-conf
 ```
 
+Working on migrating to use a bare repository with `--work-tree=$HOME` for easy usage, as [seen here](https://www.atlassian.com/git/tutorials/dotfiles).
+
 ## Current Applications
 
 The following applications have configuration files in this repo:
