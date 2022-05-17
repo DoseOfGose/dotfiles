@@ -1,10 +1,15 @@
 # Bash customizations
 
+# Add custom scripts folder locations to PATH
+export PATH="~/Code/System/Scripts:$PATH"
+
 # Use vi keybindings instead of emacs style
 set -o vi
 
 # Reload bash -- useful for when trying out new customizations
 alias reload_bashrc='source ~/.bashrc'
+
+alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME/Code/System/dotfiles'
 
 # Grep with color
 alias grep='grep --color'
@@ -100,6 +105,11 @@ alias neovim=nvim
 export EDITOR=nvim
 export VISUAL=nvim
 
+# Some dev helper aliases/functions.  Git aliases are handled by gitconfig
+singlejest() {
+  node node_modules/jest/bin/jest.js -i "$1" -c jest.config.js 
+}
+
 if [[ "$OSTYPE" == "darwin"* ]]; then
   export BASH_SILENCE_DEPRECATION_WARNING=1
 
@@ -128,6 +138,3 @@ EOT
     }
 
 fi
-
-# Add /usr/local/bin to path
-export PATH=$PATH:/usr/local/bin:/Users/gose/Library/Python/3.8/bin
