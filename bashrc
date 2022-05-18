@@ -9,7 +9,11 @@ set -o vi
 # Reload bash -- useful for when trying out new customizations
 alias reload_bashrc='source ~/.bashrc'
 
-alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME/Code/System/dotfiles'
+# Helper commands for using worktree setup for dotfiles on local system
+# First is for my active files
+alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+# Second is for the presentation version for GitHub
+alias dotfiles-github='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME/Code/System/dotfiles'
 
 # Grep with color
 alias grep='grep --color'
