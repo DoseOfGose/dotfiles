@@ -1,2 +1,5 @@
 # Folder view files:
 .DS_Store
+
+# Ignore bare repo location for active branch
+.dotfiles
