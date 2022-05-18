@@ -3,3 +3,5 @@
 
 # Ignore bare repo location for active branch
 .dotfiles
+# Except aux storage for items not needed for active configs
+!.dotfiles/aux

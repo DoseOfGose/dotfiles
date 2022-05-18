@@ -1,8 +1,9 @@
 [alias]
-	lg = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)'
-	lga = !git lg --all
+  lg = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)'
+  lga = !git lg --all
+  puuush = push -u origin HEAD
 [init]
-	defaultBranch = development
+  defaultBranch = development
 # Can use [includeIf] definitions for managing work and personal credentials based directory structure
 # See https://gist.github.com/bgauduch/06a8c4ec2fec8fef6354afe94358c89e
 [user]
@@ -13,4 +14,4 @@
 [push]
   default = current
 [credential]
-	helper = osxkeychain
+  helper = osxkeychain
