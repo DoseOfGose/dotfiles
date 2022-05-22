@@ -113,6 +113,7 @@ show_help_menu() {
     "" \
     "Git Status"                                        C-s       "run -b '\"$0\" git_status'" \
     "Git Add"                                           a         "run -b '\"$0\" git_add'" \
+    "Git Add Interactively"                             A         "run -b '\"$0\" git_add_interactive'" \
     "Git Custom lg"                                     C-l       "run -b '\"$0\" git_lg'" \
     "Git Custom lga"                                    l         "run -b '\"$0\" git_lga'" \
     "Git Pull"                                          p         "run -b '\"$0\" git_pull'" \
@@ -148,6 +149,9 @@ main() {
       ;;
     git_add)
       open_popup_if_not_git_session "$git add $git_dot_option"
+      ;;
+    git_add_interactive)
+      open_popup_if_not_git_session "$git add -i"
       ;;
     git_lg)
       open_popup_if_not_git_session "$git lg"

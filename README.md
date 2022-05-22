@@ -13,13 +13,26 @@
 
 A _Work in Progress_ ™️.
 
-Collection of doseofgose's personal dotfiles.  See the [Issues tab](https://github.com/DoseOfGose/dotfiles/issues) for planned work to enhance this collection's content and workflows.
+Collection of doseofgose's personal dotfiles.
+
+## Current Applications
+
+The following applications have configuration files and related scripts in this repo:
+- Bash
+- Vim
+- Git
+- Tmux
+- Alacritty
 
 ## Installation and My Workfile
 
 Dotfiles are quite personal and specific to the individual.  It's recommended to look at the contents as reference/inspiration, but these files are not setup for direct use by the general public.
 
-The [main branch](https://github.com/DoseOfGose/dotfiles/tree/main) of this repository is structured as a GitHub-friendly reference.  File contents and sections can be copied manually, however this repo is intended to be used with a bare repository, as [described here](https://www.atlassian.com/git/tutorials/dotfiles).
+The [main branch](https://github.com/DoseOfGose/dotfiles/tree/main) of this repository is structured as a GitHub-friendly reference.  File contents and sections can be copied manually, however this repo is intended to be used with a bare repository using the `active` branch, as [described here](https://www.atlassian.com/git/tutorials/dotfiles).
+
+## Prerequisites
+
+Most requirements/prerequisites are not captured here.  I will try to add more over time.
 
 ## Unique Customizations
 ### Tmux Git Popup Session
@@ -29,13 +42,7 @@ To trigger a helpful menu within Tmux, simply do the following key strokes: `C-a
 
 ![Screenshot of custom menu](/scripts/tmux-git-menu.png)
 
-See [this example video](https://youtu.be/8QEZ9JOQyoY) for a demo of basic functionality. (Better quality video TBD)
+See [this example video](https://youtu.be/8QEZ9JOQyoY) for a demo of basic functionality. (I'll make a better quality video "eventually")
 
-
-## Current Applications
-
-The following applications have configuration files in this repo:
-- Bash
-- Vim
-- Git
-- Tmux
+## Work In Progress
+I make changes when I have the motivation, desire, and time.  These tend to come in short burts, sometimes with many months in between.  With so many, many things I want to do with my setup, this means these dotfiles are just a snapshot of a work in progress.  In a way, dotfiles are a continuous project -- one that is never really complete.
