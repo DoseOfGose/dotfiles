@@ -1,4 +1,4 @@
--- Migration from vimscript to Lua in progress
+--  Migration from vimscript to Lua in progress
 -- Useful reference: https://www.notonlycode.org/neovim-lua-config/
 --
 -- File goals:
@@ -16,13 +16,11 @@
 --    - `gd` but opening in a new pane/make it easy to come back to original context
 --    - C-z is captured in edit mode.  Would like that to suspend the process
 --
+
+-- Plugins for vim-plug: https://github.com/junegunn/vim-plug 
+-- May consider converting to a lua-frendly format: https://dev.to/vonheikemen/neovim-using-vim-plug-in-lua-3oom
+
 vim.cmd([[
-" Personal Gist: https://gist.github.com/DoseOfGose/fd31343465b4f8f37442681110071c02
-" No need to worry about compatibility with vi:
-set nocompatible
-
-
-" Plugins for vim-plug: https://github.com/junegunn/vim-plug
 call plug#begin()
 
 " Theme(s):
@@ -68,7 +66,12 @@ Plug 'folke/todo-comments.nvim'
 Plug 'ryanoasis/vim-devicons' " Make sure to have a patched font with file type glyphs: https://github.com/ryanoasis/nerd-fonts#patched-fonts
 
 call plug#end()
+]])
 
+
+
+-- Legacy vimscript setup:
+vim.cmd([[
 " Show relative line numbers when in normal/visual modes, and absolute in insert
 " Source: https://jeffkreeftmeijer.com/vim-number/
 set number 
