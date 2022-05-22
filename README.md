@@ -13,22 +13,24 @@
 
 A _Work in Progress_ ™️.
 
-Initial collection of doseofgose's personal dotfiles.  See the [Issues tab](https://github.com/DoseOfGose/dotfiles/issues) for planned work to enhance this collection's content and workflows.
+Collection of doseofgose's personal dotfiles.  See the [Issues tab](https://github.com/DoseOfGose/dotfiles/issues) for planned work to enhance this collection's content and workflows.
 
-## Installation
+## Installation and My Workfile
 
-No automated process currently exists.  One method is to clone the repo and copy the files to your home directory by adding a dot `.` prefix:
+Dotfiles are quite personal and specific to the individual.  It's recommended to look at the contents as reference/inspiration, but these files are not setup for direct use by the general public.
 
-```bash
-git clone https://github.com/DoseOfGose/dotfiles.git
-cd dotfiles
-cp bashrc ~/.bashrc
-cp vimrc ~/.vimrc
-cp gitconfig ~/.gitconfig
-cp tmux-conf ~/.tmux-conf
-```
+The [main branch](https://github.com/DoseOfGose/dotfiles/tree/main) of this repository is structured as a GitHub-friendly reference.  File contents and sections can be copied manually, however this repo is intended to be used with a bare repository, as [described here](https://www.atlassian.com/git/tutorials/dotfiles).
 
-Working on migrating to use a bare repository with `--work-tree=$HOME` for easy usage, as [seen here](https://www.atlassian.com/git/tutorials/dotfiles).
+## Unique Customizations
+### Tmux Git Popup Session
+I created a script to utilize a per-session-and-window popup session for quickly triggering various git actions.
+
+To trigger a helpful menu within Tmux, simply do the following key strokes: `C-a`, `C-g`, `?`.  The hotkeys in the menu are equivalent to triggering the actions directly with `C-a`, `C-g`, and then the hotkey.  This utilizes a tmux `key-table` to essentially create a custom "Git Popup Commands" Leader/Layer.
+
+![Screenshot of custom menu](/scripts/tmux-git-menu.png)
+
+See [this example video](https://youtu.be/8QEZ9JOQyoY) for a demo of basic functionality. (Better quality video TBD)
+
 
 ## Current Applications
 
