@@ -1,4 +1,4 @@
-#### Bash customizations
+# Bash customizations
 
 # Add custom scripts folder locations to PATH
 export PATH="~/Code/System/Scripts:$PATH"
@@ -142,3 +142,6 @@ EOT
     }
 
 fi
+
+# fzf auto-complete and bindings
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash

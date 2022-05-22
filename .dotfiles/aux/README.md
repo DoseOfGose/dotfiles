@@ -13,27 +13,36 @@
 
 A _Work in Progress_ ™️.
 
-Initial collection of doseofgose's personal dotfiles.  See the [Issues tab](https://github.com/DoseOfGose/dotfiles/issues) for planned work to enhance this collection's content and workflows.
-
-## Installation
-
-No automated process currently exists.  One method is to clone the repo and copy the files to your home directory by adding a dot `.` prefix:
-
-```bash
-git clone https://github.com/DoseOfGose/dotfiles.git
-cd dotfiles
-cp bashrc ~/.bashrc
-cp vimrc ~/.vimrc
-cp gitconfig ~/.gitconfig
-cp tmux-conf ~/.tmux-conf
-```
-
-Working on migrating to use a bare repository with `--work-tree=$HOME` for easy usage, as [seen here](https://www.atlassian.com/git/tutorials/dotfiles).
+Collection of doseofgose's personal dotfiles.
 
 ## Current Applications
 
-The following applications have configuration files in this repo:
+The following applications have configuration files and related scripts in this repo:
 - Bash
 - Vim
 - Git
 - Tmux
+- Alacritty
+
+## Installation and My Workfile
+
+Dotfiles are quite personal and specific to the individual.  It's recommended to look at the contents as reference/inspiration, but these files are not setup for direct use by the general public.
+
+The [main branch](https://github.com/DoseOfGose/dotfiles/tree/main) of this repository is structured as a GitHub-friendly reference.  File contents and sections can be copied manually, however this repo is intended to be used with a bare repository using the `active` branch, as [described here](https://www.atlassian.com/git/tutorials/dotfiles).
+
+## Prerequisites
+
+Most requirements/prerequisites are not captured here.  I will try to add more over time.
+
+## Unique Customizations
+### Tmux Git Popup Session
+I created a script to utilize a per-session-and-window popup session for quickly triggering various git actions.
+
+To trigger a helpful menu within Tmux, simply do the following key strokes: `C-a`, `C-g`, `?`.  The hotkeys in the menu are equivalent to triggering the actions directly with `C-a`, `C-g`, and then the hotkey.  This utilizes a tmux `key-table` to essentially create a custom "Git Popup Commands" Leader/Layer.
+
+![Screenshot of custom menu](/scripts/tmux-git-menu.png)
+
+See [this example video](https://youtu.be/8QEZ9JOQyoY) for a demo of basic functionality. (I'll make a better quality video "eventually")
+
+## Work In Progress
+I make changes when I have the motivation, desire, and time.  These tend to come in short burts, sometimes with many months in between.  With so many, many things I want to do with my setup, this means these dotfiles are just a snapshot of a work in progress.  In a way, dotfiles are a continuous project -- one that is never really complete.
