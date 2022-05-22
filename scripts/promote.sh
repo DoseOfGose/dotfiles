@@ -15,8 +15,13 @@ cd $TARGET_WORK_TREE
 cp $HOME/.bashrc bashrc
 cp $HOME/.config/nvim/init.lua vimrc.lua
 cp -a $HOME/.dotfiles/aux/ ./scripts/
-rm ./scripts/README.md
+rm ./README.md
+mv ./scripts/README.md README.md
 cp $HOME/.dotfiles/aux/README.md README.md
 cp $HOME/.gitconfig gitconfig
 cp $HOME/.tmux.conf tmux.conf
 cp $HOME/.config/alacritty/alacritty.yml alacritty.yml
+
+
+echo -e "Reminder: To use the last commit message from the bare repo's active branch as the commit message in the normal repo's main branch:\n\
+\tgit commit -m"'"$(dotfiles log -1 --pretty=%B)"'
