@@ -1,4 +1,4 @@
-# Bash customizations
+#### Bash customizations
 
 # Add custom scripts folder locations to PATH
 export PATH="~/Code/System/Scripts:$PATH"
