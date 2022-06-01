@@ -26,9 +26,11 @@ call plug#begin()
 " Theme(s):
 Plug 'drewtempelmeyer/palenight.vim'
 Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
+Plug 'EdenEast/nightfox.nvim'
 
 " Adds gutter to side for adding things like git changes/status/errors
-Plug 'airblade/vim-gitgutter'
+" Plug 'airblade/vim-gitgutter'
+Plug 'lewis6991/gitsigns.nvim'
 
 " Tree explorer (e.g. folders/files)
 Plug 'preservim/nerdtree' |
@@ -58,8 +60,16 @@ Plug 'ap/vim-css-color'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'folke/todo-comments.nvim'
 
-" Notes/Vimwiki plugins
-"Plug 
+" Telescope 
+" Plug 'nvim-lua/plenary.nvim' " Already brought in for TODO highlighting
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+" Make sure to also have ripgrep on system
+
+" Some plugins to try?
+" Plug 'simrat39/symbols-outline.nvim'
+" 
+
 
 " Ensure this loads _after_ NERDTree and airline
 " Uses a font with dev icons loaded to display unicode icons
@@ -72,6 +82,9 @@ call plug#end()
 
 -- Legacy vimscript setup:
 vim.cmd([[
+
+set termguicolors
+
 " Show relative line numbers when in normal/visual modes, and absolute in insert
 " Source: https://jeffkreeftmeijer.com/vim-number/
 set number 
@@ -108,6 +121,7 @@ set smarttab " Insert spaces in lieu of tab when tab is pressed
 " vim.g.tokyonight_style night
 " colorscheme tokyonight
 colorscheme palenight
+" colorscheme nightfox
 " Set current-line highlighting
 set cursorline
 
@@ -120,7 +134,7 @@ set ruler " Show cursor position
 
 set encoding=utf-8 " UTF8/Unicode encoding
 set linebreak " Avoid line breaks in middle of words
-set scrolloff=2 " Always keep 1 line minimum above and below cursor
+set scrolloff=3 " Always keep 1 line minimum above and below cursor
 set sidescrolloff=5 " Always keep 5 columns/chars to left and right of cursor
 set title " Set the window title to file
 
@@ -137,8 +151,15 @@ set colorcolumn=80 " Display a column bar at 80 characters
 set list lcs=tab:▸\ ,eol:↲,trail:~,precedes:«,extends:» " Set characters
 
 " Bindings
+" Change space to leader
+" First stop default Normal binding of going right a char:
+nnoremap <Space> <Nop>
+" Set the leader key:
 let mapleader=" "
-  " Set Leaderkey / to clear search highlighting
+" Make the mapped sequence timer longer (time in ms)
+set timeoutlen=15000
+
+" Set Leaderkey / to clear search highlighting
 nnoremap <Leader>/ :noh<return> 
 
  " Mac specific bindings
@@ -183,6 +204,18 @@ if isdirectory('./node_modules') && isdirectory('./node_modules/eslint')
   let g:coc_global_extensions += ['coc-eslint']
 endif
 
+" Unused parameter highlighting
+" https://github.com/neoclide/coc.nvim/issues/1046
+highlight CocUnusedHighlight ctermbg=NONE guibg=NONE guifg=#808080 gui=undercurl cterm=undercurl
+highlight CocErrorHighlight ctermbg=NONE guibg=NONE guifg=#ff0000 gui=undercurl cterm=undercurl
+augroup UndercurlSetup
+  autocmd!
+  autocmd ColorScheme *
+      \ hi CocUnusedHighlight ctermbg=NONE guibg=NONE guifg=#808080 gui=undercurl cterm=undercurl
+  autocmd ColorScheme *
+      \ hi CocErrorHighlight ctermbg=NONE guibg=NONE guifg=#ff0000 gui=undercurl cterm=undercurl
+augroup END
+
 " Nerdcommenter
 let g:NERDCreateDefaultMappings = 1
 " Add spaces after comment delimiters by default
@@ -214,67 +247,151 @@ autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescriptreact
 " References:
 " https://thoughtbot.com/blog/modern-typescript-and-react-development-in-vim
 
+" Temporary/Testing Keybindings
+" Use <leader>t as "Temp/Test" layer.  Should revisit these regularly to remove
+" ones that I don't end up using, and promoting useful ones to a permanent home
+" [F]ind [G]itfiles
+nnoremap <leader>tfg :lua require('telescope.builtin').git_files()<CR>
+" [F]ind [F]iles "special" (uses current path of open file)
+nnoremap <leader>tfF :lua require('telescope.builtin').find_files({ cwd = vim.fn.expand('%:p:h') })<cr>
+" [F]ind [F]iles
+nnoremap <leader>tff :lua require('telescope.builtin').find_files()<cr>
+" Might not use since I have gd/gy/gr
+" [F]ind [D]efinitions
+nnoremap <leader>tfd :lua require('telescope.builtin').lsp_definitions({jump_type = "never"})<CR>
+" [F]ind [U]ses
+nnoremap <leader>tfu :lua require('telescope.builtin').lsp_references()<CR>
+" [F]ind [A]round [F]ile (Grep)
+nnoremap <leader>tfaf :lua require('telescope.builtin').live_grep({grep_open_files=true, cwd = vim.fn.expand('%:p:h')})<cr>
+" [F]ind [S]tring (under cursor?)
+nnoremap <leader>tfs :lua require('telescope.builtin').grep_string()<CR>
+" [F]ind [I]nside [F]ile
+nnoremap <leader>tfif :lua require('telescope.builtin').current_buffer_fuzzy_find()<CR>
+" [T]elescope
+nnoremap <leader>tT :Telescope<CR>
 
-" Setup for TODO highlighting -- may look into lighter alternatives or my own
-" Lua implementation
+" Easy resourcing of this file:
+command! Resource source ~/.config/nvim/init.lua 
 
 ]])
 
-  require("todo-comments").setup {
-    signs = true, -- show icons in the signs column
-    sign_priority = 8, -- sign priority
-    -- keywords recognized as todo comments
-    keywords = {
-      FIX = {
-        icon = " ", -- icon used for the sign, and in search results
-        color = "error", -- can be a hex color, or a named color (see below)
-        alt = { "FIXME", "BUG", "FIXIT", "ISSUE" }, -- a set of other keywords that all map to this FIX keywords
-        -- signs = false, -- configure signs for some keywords individually
-      },
-      TODO = { icon = " ", color = "info" },
-      HACK = { icon = " ", color = "warning" },
-      WARN = { icon = " ", color = "warning", alt = { "WARNING", "XXX" } },
-      PERF = { icon = " ", alt = { "OPTIM", "PERFORMANCE", "OPTIMIZE" } },
-      NOTE = { icon = " ", color = "hint", alt = { "INFO" } },
-    },
-    merge_keywords = true, -- when true, custom keywords will be merged with the defaults
-    -- highlighting of the line containing the todo comment
-    -- * before: highlights before the keyword (typically comment characters)
-    -- * keyword: highlights of the keyword
-    -- * after: highlights after the keyword (todo text)
-    highlight = {
-      before = "", -- "fg" or "bg" or empty
-      keyword = "wide", -- "fg", "bg", "wide" or empty. (wide is the same as bg, but will also highlight surrounding characters)
-      after = "fg", -- "fg" or "bg" or empty
-      pattern = [[.*<(KEYWORDS)\s*:]], -- pattern or table of patterns, used for highlightng (vim regex)
-      comments_only = true, -- uses treesitter to match keywords in comments only
-      max_line_len = 400, -- ignore lines longer than this
-      exclude = {}, -- list of file types to exclude highlighting
-    },
-    -- list of named colors where we try to extract the guifg from the
-    -- list of hilight groups or use the hex color if hl not found as a fallback
-    colors = {
-      error = { "DiagnosticError", "ErrorMsg", "#DC2626" },
-      warning = { "DiagnosticWarning", "WarningMsg", "#FBBF24" },
-      info = { "#2563EB" },
-      hint = { "DiagnosticHint", "#10B981" },
-      default = { "Identifier", "#7C3AED" },
-    },
-    search = {
-      command = "rg",
-      args = {
-        "--color=never",
-        "--no-heading",
-        "--with-filename",
-        "--line-number",
-        "--column",
-      },
-      -- regex that will be used to match keywords.
-      -- don't replace the (KEYWORDS) placeholder
-      pattern = [[\b(KEYWORDS):]], -- ripgrep regex
-      -- pattern = [[\b(KEYWORDS)\b]], -- match without the extra colon. You'll likely get false positives
-    },
+-- Telescope setup
+require('telescope').setup {
+  extensions = {
+    fzf = {
+      fuzzy = true,                    -- false will only do exact matching
+      override_generic_sorter = true,  -- override the generic sorter
+      override_file_sorter = true,     -- override the file sorter
+      case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
+                                       -- the default case_mode is "smart_case"
+    }
   }
+}
+-- To get fzf loaded and working with telescope, you need to call
+-- load_extension, somewhere after setup function:
+require('telescope').load_extension('fzf')
+
+
+-- TODO highlighting
+require("todo-comments").setup {
+  signs = true, -- show icons in the signs column
+  sign_priority = 8, -- sign priority
+  -- keywords recognized as todo comments
+  keywords = {
+    FIX = {
+      icon = " ", -- icon used for the sign, and in search results
+      color = "error", -- can be a hex color, or a named color (see below)
+      alt = { "FIXME", "BUG", "FIXIT", "ISSUE" }, -- a set of other keywords that all map to this FIX keywords
+      -- signs = false, -- configure signs for some keywords individually
+    },
+    TODO = { icon = " ", color = "info" },
+    HACK = { icon = " ", color = "warning" },
+    WARN = { icon = " ", color = "warning", alt = { "WARNING", "XXX" } },
+    PERF = { icon = " ", alt = { "OPTIM", "PERFORMANCE", "OPTIMIZE" } },
+    NOTE = { icon = " ", color = "hint", alt = { "INFO" } },
+  },
+  merge_keywords = true, -- when true, custom keywords will be merged with the defaults
+  -- highlighting of the line containing the todo comment
+  -- * before: highlights before the keyword (typically comment characters)
+  -- * keyword: highlights of the keyword
+  -- * after: highlights after the keyword (todo text)
+  highlight = {
+    before = "", -- "fg" or "bg" or empty
+    keyword = "wide", -- "fg", "bg", "wide" or empty. (wide is the same as bg, but will also highlight surrounding characters)
+    after = "fg", -- "fg" or "bg" or empty
+    pattern = [[.*<(KEYWORDS)\s*:]], -- pattern or table of patterns, used for highlightng (vim regex)
+    comments_only = true, -- uses treesitter to match keywords in comments only
+    max_line_len = 400, -- ignore lines longer than this
+    exclude = {}, -- list of file types to exclude highlighting
+  },
+  -- list of named colors where we try to extract the guifg from the
+  -- list of hilight groups or use the hex color if hl not found as a fallback
+  colors = {
+    error = { "DiagnosticError", "ErrorMsg", "#DC2626" },
+    warning = { "DiagnosticWarning", "WarningMsg", "#FBBF24" },
+    info = { "#2563EB" },
+    hint = { "DiagnosticHint", "#10B981" },
+    default = { "Identifier", "#7C3AED" },
+  },
+  search = {
+    command = "rg",
+    args = {
+      "--color=never",
+      "--no-heading",
+      "--with-filename",
+      "--line-number",
+      "--column",
+    },
+    -- regex that will be used to match keywords.
+    -- don't replace the (KEYWORDS) placeholder
+    pattern = [[\b(KEYWORDS):]], -- ripgrep regex
+    -- pattern = [[\b(KEYWORDS)\b]], -- match without the extra colon. You'll likely get false positives
+  },
+}
+
+
+require('gitsigns').setup {
+  signs = {
+    add          = {hl = 'GitSignsAdd'   , text = '│', numhl='GitSignsAddNr'   , linehl='GitSignsAddLn'},
+    change       = {hl = 'GitSignsChange', text = '│', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
+    delete       = {hl = 'GitSignsDelete', text = '_', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn'},
+    topdelete    = {hl = 'GitSignsDelete', text = '‾', numhl='GitSignsDeleteNr', linehl='GitSignsDeleteLn'},
+    changedelete = {hl = 'GitSignsChange', text = '~', numhl='GitSignsChangeNr', linehl='GitSignsChangeLn'},
+  },
+  signcolumn = true,  -- Toggle with `:Gitsigns toggle_signs`
+  numhl      = false, -- Toggle with `:Gitsigns toggle_numhl`
+  linehl     = false, -- Toggle with `:Gitsigns toggle_linehl`
+  word_diff  = false, -- Toggle with `:Gitsigns toggle_word_diff`
+  watch_gitdir = {
+    interval = 1000,
+    follow_files = true
+  },
+  attach_to_untracked = true,
+  current_line_blame = true, -- Toggle with `:Gitsigns toggle_current_line_blame`
+  current_line_blame_opts = {
+    virt_text = true,
+    virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
+    delay = 500,
+    ignore_whitespace = false,
+  },
+  current_line_blame_formatter = ' \u{E0A0}<author>, <author_time:%Y-%m-%d> - <summary>',
+  sign_priority = 6,
+  update_debounce = 100,
+  status_formatter = nil, -- Use default
+  max_file_length = 40000,
+  preview_config = {
+    -- Options passed to nvim_open_win
+    border = 'single',
+    style = 'minimal',
+    relative = 'cursor',
+    row = 0,
+    col = 1
+  },
+  yadm = {
+    enable = false
+  },
+}
+
 
 -- local dap = require('dap')
 -- dap.adapters.node2 = {
@@ -302,3 +419,11 @@ autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescriptreact
   -- },
 -- }
 
+
+
+-- Keybinding ideas:
+-- Toggle hotkey to effectively turn current file into a diff:
+-- Gitsigns toggle_linehl
+-- Gitsigns toggle_deleted
+--
+--

@@ -1,7 +1,7 @@
 # Bash customizations
 
 # Add custom scripts folder locations to PATH
-export PATH="~/Code/System/Scripts:$PATH"
+export PATH="~/Code/System/Scripts:/usr/local/bin:$PATH"
 
 # Use vi keybindings instead of emacs style
 set -o vi

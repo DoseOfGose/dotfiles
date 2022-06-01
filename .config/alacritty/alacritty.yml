@@ -3,7 +3,24 @@
 font:
   normal:
     family: Hack Nerd Font Mono
+    # family: Menlo
     style: Regular
+
+colors:
+  # Make transparency apply to even true color backgrounds, e.g. vim:
+  transparent_background_colors: true
+
+window:
+  opacity: 0.97
+  startup_mode: Maximized
+  dynamic_title: true
+  # padding:
+    # x: 4
+    # y: 4
+hide_cursor_when_typing: true
+
+shell:
+  program: /usr/local/bin/bash
 
 key_bindings:
   # Remove Cmd-w binding because I hit that constantly trying to do Ctrl-w leaders for vim
@@ -37,7 +54,8 @@ mouse_bindings:
   - { mouse: Right,  action: ReceiveChar }
 
 scrolling:
-  history: 1000
+  history: 100000
 
 selection:
   save_to_clipboard: false
+

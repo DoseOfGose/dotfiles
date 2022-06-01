@@ -21,7 +21,6 @@ open_popup_if_not_git_session() {
   local command
   local new_sesh
   local pause_for_launch
-  pause_for_launch
   command="$1"
   new_sesh="${session_prefix}${session_name}-${window_name}"
   
@@ -105,6 +104,7 @@ show_help_menu() {
    $(tmux display-menu -T "#[align=centre fg=green]Custom Git Menu" \
     "" \
     "-#[nodim align=centre fg=blue]by doseofgose" "" "" \
+    "-#[nodim align=centre]<GitPopupLeader> is C-g" "" "" \
     "" \
     "Toggle Git Popup for this Session+Window"          C-g       "run -b '\"$0\" toggle_popup'" \
     "Exit from Popup"                                   C-Escape  "run -b '\"$0\" exit_popup'" \
