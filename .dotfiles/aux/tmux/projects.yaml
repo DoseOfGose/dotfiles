@@ -1,0 +1,30 @@
+- name: iDonate Giving Form
+  keybind: C-a
+  session: idonate
+  window: giving-form
+  layout: T
+  path: ~/Code/iDonate/giving-form
+  paneActions:
+    - vim
+    - yarn start
+    - figlet giving-form
+- name: iDonate GMS React
+  keybind: C-b
+  session: idonate
+  window: gms-react
+  layout: T
+  path: ~/Code/iDonate/gms-react
+  paneActions:
+    - vim
+    - yarn start
+    - figlet gms-react
+- name: iDonate Backend
+  keybind: C-d
+  session: idonate
+  window: idonate-backend
+  layout: T
+  path: ~/Code/iDonate/idonate-backend
+  paneActions:
+    - vim
+    - yarn start
+    - figlet idonate-backend
