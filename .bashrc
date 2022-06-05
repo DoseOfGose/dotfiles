@@ -53,17 +53,8 @@ function myip-intranet() {
   ifconfig en0 | grep 'inet ' | awk '{print $2}'
 }
 
+
 # History Changes
-# Add history+grep shorthand
-function history() {
-  if [[ $# -eq 0 ]];
-  then
-    command history
-  else
-    command history | grep $1
-  fi
-}
-alias _history='command history'
 # Set `history` to append history to file
 shopt -s histappend
 # Increase history size from default 500
@@ -72,6 +63,29 @@ export HISTSIZE=5000
 export HISTFILESIZE=5000
 # Set history to ignore consecutive duplicate commands and commands that start with a space
 export HISTCONTROL=ignoreboth
+alias _history='command history'
+_clean_history() {
+  # history -n has to be there before history -w to read from
+  # .bash_history the commands saved from any other terminal,
+  _history -n            # Read in entries that are not in current history
+  _history -w            # Write history, trigger erasedups
+  #history -a            # Append history; does not trigger erasedups
+  _history -c            # Clear current history
+  _history -r            # Read history from $HISTFILE
+}
+# This can really mess with history expansion, e.g. `!!`.
+# But if you don't use history expansion, good way to constantly sync history:
+# PROMPT_COMMAND="_clean_history; $PROMPT_COMMAND"
+# Add history+grep shorthand
+function history() {
+  _clean_history
+  if [[ $# -eq 0 ]];
+  then
+    command history
+  else
+    command history | grep $1
+  fi
+}
 
 # NVM Setup
 export NVM_DIR=~/.nvm

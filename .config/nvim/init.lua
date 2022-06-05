@@ -3,18 +3,14 @@
 --
 -- File goals:
 --  - Convert to Lua
---  - Get Harpoon/fzf setup and flow working
+--  - Get Harpoon setup and flow working
 --  - Node and Chrome debug attaching
---  - Unused variable "lowlighting"
 --  - Smooth scrolling to take advantage of alactritty
---  - Sync updates with GitHub
---  - Setup bare repo configuration with worktree for dotfiles to be at top level
---    - Have at least 2 branches setup.  1 is the 
 --  - Proper setup, commands and keybindings for Linux vs Mac
 --
 --  - Explore/Setup Keybindings for:
 --    - `gd` but opening in a new pane/make it easy to come back to original context
---    - C-z is captured in edit mode.  Would like that to suspend the process
+--    - C-z is captured in insert mode.  Would like that to suspend the process
 --
 
 -- Plugins for vim-plug: https://github.com/junegunn/vim-plug 
@@ -27,6 +23,7 @@ call plug#begin()
 Plug 'drewtempelmeyer/palenight.vim'
 Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
 Plug 'EdenEast/nightfox.nvim'
+Plug 'catppuccin/nvim', {'name': 'catppuccin'}
 
 " Adds gutter to side for adding things like git changes/status/errors
 " Plug 'airblade/vim-gitgutter'
@@ -68,12 +65,21 @@ Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 
 " Some plugins to try?
 " Plug 'simrat39/symbols-outline.nvim'
+" Plug 'messenger'
 " 
 
 
+" Top tab bar
+Plug 'romgrk/barbar.nvim'
+
+" Treesitter
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
 " Ensure this loads _after_ NERDTree and airline
 " Uses a font with dev icons loaded to display unicode icons
-Plug 'ryanoasis/vim-devicons' " Make sure to have a patched font with file type glyphs: https://github.com/ryanoasis/nerd-fonts#patched-fonts
+" Plug 'ryanoasis/vim-devicons' " Make sure to have a patched font with file type glyphs: https://github.com/ryanoasis/nerd-fonts#patched-fonts
+" This is a form of vim-devicons that also supports colors:
+Plug 'kyazdani42/nvim-web-devicons'
 
 call plug#end()
 ]])
@@ -120,8 +126,10 @@ set smarttab " Insert spaces in lieu of tab when tab is pressed
 " Use colorscheme
 " vim.g.tokyonight_style night
 " colorscheme tokyonight
-colorscheme palenight
+" colorscheme palenight
 " colorscheme nightfox
+let g:catppuccin_flavour = "mocha"
+colorscheme catppuccin
 " Set current-line highlighting
 set cursorline
 
@@ -160,7 +168,7 @@ let mapleader=" "
 set timeoutlen=15000
 
 " Set Leaderkey / to clear search highlighting
-nnoremap <Leader>/ :noh<return> 
+nnoremap <Leader>/ :noh<return>
 
  " Mac specific bindings
 if has("mac")
@@ -169,6 +177,7 @@ endif
 
  " Nerdtree
 nnoremap <silent> <Leader>b :NERDTreeToggle<CR>
+nnoremap <silent> <Leader>B :NERDTreeFind<CR>
 " Start NERDTree when Vim is started without file arguments.
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
@@ -187,13 +196,15 @@ let g:coc_global_extensions = [
   \ 'coc-css',
   \ 'coc-html',
   \ 'coc-yaml',
-  \ 'coc-tsserver',
+  \ 'coc-tsserver', 
   \ 'coc-git',
   \ 'coc-markdownlint',
   \ 'coc-jedi',
   \ 'coc-sh',
   \ 'coc-svg'
   \ ]
+" Also have Watchman installed for updating imports on file move/rename for tsserver
+
 
 " Load prettier and eslint if in a project with the npm packages installed
 if isdirectory('./node_modules') && isdirectory('./node_modules/prettier')
@@ -240,6 +251,7 @@ nmap <silent> ]g <Plug>(coc-diagnostic-next)
 nmap <leader>do <Plug>(coc-codeaction)
 " VSCode-esque symbol renaming for refactoring across a workspace:
 nmap <leader>rn <Plug>(coc-rename)
+nmap <leader>RN <Plug>(coc-
 
 " set filetypes as typescriptreact
 autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescriptreact
@@ -272,6 +284,9 @@ nnoremap <leader>tT :Telescope<CR>
 
 " Easy resourcing of this file:
 command! Resource source ~/.config/nvim/init.lua 
+
+" Make Ctrl-z suspend the process when in Insert mode:
+inoremap <c-z> <c-o>:stop<cr>
 
 ]])
 
@@ -349,7 +364,6 @@ require("todo-comments").setup {
   },
 }
 
-
 require('gitsigns').setup {
   signs = {
     add          = {hl = 'GitSignsAdd'   , text = '│', numhl='GitSignsAddNr'   , linehl='GitSignsAddLn'},
@@ -392,6 +406,13 @@ require('gitsigns').setup {
   },
 }
 
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = "all",
+  highlight = {
+    enable = true
+  }
+
+}
 
 -- local dap = require('dap')
 -- dap.adapters.node2 = {
@@ -418,7 +439,6 @@ require('gitsigns').setup {
     -- processId = require'dap.utils'.pick_process,
   -- },
 -- }
-
 
 
 -- Keybinding ideas:

@@ -79,9 +79,6 @@ project_dir_lookup() {
       ;;
     config)
       case "$window_name" in
-        example)
-          echo '~/Code/System/example'
-          ;;
         *)
           echo '~/.dotfiles'
           ;;
