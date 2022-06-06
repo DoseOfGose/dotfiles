@@ -77,7 +77,7 @@ Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 " Ensure this loads _after_ NERDTree and airline
 " Uses a font with dev icons loaded to display unicode icons
-" Plug 'ryanoasis/vim-devicons' " Make sure to have a patched font with file type glyphs: https://github.com/ryanoasis/nerd-fonts#patched-fonts
+Plug 'ryanoasis/vim-devicons' " Make sure to have a patched font with file type glyphs: https://github.com/ryanoasis/nerd-fonts#patched-fonts
 " This is a form of vim-devicons that also supports colors:
 Plug 'kyazdani42/nvim-web-devicons'
 

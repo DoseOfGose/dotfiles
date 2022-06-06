@@ -3,17 +3,17 @@
   session: idonate
   window: giving-form
   layout: T
-  path: ~/Code/iDonate/giving-form
+  path: /Users/ericgose/Code/iDonate/giving-form
   paneActions:
     - vim
     - yarn start
     - figlet giving-form
 - name: iDonate GMS React
-  keybind: C-b
+  keybind: C-s
   session: idonate
   window: gms-react
   layout: T
-  path: ~/Code/iDonate/gms-react
+  path: /Users/ericgose/Code/iDonate/gms-react
   paneActions:
     - vim
     - yarn start
@@ -23,8 +23,59 @@
   session: idonate
   window: idonate-backend
   layout: T
-  path: ~/Code/iDonate/idonate-backend
+  path: /Users/ericgose/Code/iDonate/idonate-backend
   paneActions:
     - vim
     - yarn start
-    - figlet idonate-backend
+    - figlet idonate; figlet backend
+- name: Testing
+  keybind: C-f
+  session: my-sesh
+  window: my-win
+  layout: T
+  path: /Users/ericgose/Code/iDonate/giving-form
+  paneActions:
+    - vim
+    - yarn start
+    - giving-form
+- name: dotfiles vim
+  keybind: # No keybind
+  session: config
+  window: vim-lua
+  layout: single-pane
+  path: /Users/ericgose/.config/nvim
+  paneActions:
+    - vim init.lua
+- name: dotfiles bashrc
+  keybind: # No keybind
+  session: config
+  window: bashrc
+  layout: single-pane
+  path: /Users/ericgose/
+  paneActions:
+    - vim .bashrc
+- name: dotfiles tmux
+  keybind: # No keybind
+  session: config
+  window: tmux
+  layout: single-pane
+  path: /Users/ericgose/
+  paneActions:
+    - vim .tmux.conf
+- name: dotfiles tmux-projects
+  keybind: # No keybind
+  session: config
+  window: projects
+  layout: side-by-side
+  path: /Users/ericgose/.dotfiles/aux/tmux
+  paneActions:
+    - vim projects.sh
+    - vim projects.yaml
+- name: dotfiles tmux-git-popup
+  keybind: # No keybind
+  session: config
+  window: git-popup
+  layout: singe-pane
+  path: /Users/ericgose/.dotfiles/aux
+  paneActions:
+    - vim tmux-git-popup.sh
