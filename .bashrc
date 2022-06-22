@@ -1,7 +1,7 @@
 # Bash customizations
 
 # Add custom scripts folder locations to PATH
-export PATH="~/Code/System/Scripts:/usr/local/bin:$PATH"
+export PATH="~/Code/System/Scripts:~/go/bin:/usr/local/bin:$PATH"
 
 # Use vi keybindings instead of emacs style
 set -o vi
@@ -27,8 +27,45 @@ alias _ls='/bin/ls'
 alias load_ssh='source ~/.ssh-list'
 
 # Customize terminal prefix
-PS1='\[\e[1;32m\][\u@\h \W]\$\[\e[0m\] '
-PS2='\[\e[32m\][continue ->]\[\e[0m\] '
+# PS1 Colors:
+# Eventually want to be able to set colorscheme in 1 file that gets
+# applied to PS/terminal/vim/tmux
+# These are roughly mapped from current adhoc color scheme
+PS_COLOR() {
+  echo '\[\e[38;5;'"${1}"'m\]'
+}
+PS_GREEN="$(PS_COLOR 115)"
+PS_OTHER_GREEN="$(PS_COLOR 151)"
+PS_LAVENDER="$(PS_COLOR 147)"
+PS_GRAY="$(PS_COLOR 59)"
+PS_BLUE="$(PS_COLOR 111)"
+PS_ORANGE="$(PS_COLOR 223)"
+PS_RED="$(PS_COLOR 181)"
+PS_COLOR_RESET="\[\e[0m\]"
+PS_PREFIX_LINE_ONE='╭─'
+PS_PREFIX_LINE_TWO='╰─'
+PS2_PREFIX='  ┇';
+PS_PROMPT_SYMBOL=$'\uf7d8'
+PS1_GIT=''
+PS1="${PS_OTHER_GREEN}${PS_PREFIX_LINE_ONE}${PS_GREEN}\u ${PS_GRAY}at ${PS_BLUE}\h ${PS_GRAY}in ${PS_ORANGE}\W ${PS_GRAY}(${PS_LAVENDER}\@${PS_GRAY}) ${PS_RED}\${PS1_GIT}\n${PS_OTHER_GREEN}${PS_PREFIX_LINE_TWO}${PS_PROMPT_SYMBOL} ${PS_COLOR_RESET}"
+PS2="${PS_GREEN}${PS2_PREFIX} ${PS_COLOR_RESET}"
+
+prompt_command() {
+  # $? is 0 if git dir, otherwise false
+  if git status > /dev/null 2>&1; then
+    local DYNAMIC_FIELDS_USED="\u \h \W"
+    local STATIC_LENGTH=22
+    local FIELD_LENGTH=$(echo ${DYNAMIC_FIELDS_USED@P} | wc -c)
+    local TERM_LENGTH=$(tput cols)
+    local AVAIL_CHARS=$(expr $TERM_LENGTH - $FIELD_LENGTH - $STATIC_LENGTH)
+    local GIT_STATUS=$(git status | grep 'On branch' | cut -b 11- | sed 's/\(.\{'"$AVAIL_CHARS"'\}\).*/\1.../')
+    export PS1_GIT=" "$'\ue725'" ${GIT_STATUS}"
+  else
+    export PS1_GIT=""
+  fi
+
+}
+PROMPT_COMMAND=prompt_command
 # Go up directory
 alias ..='cd ..'
 # alias --='cd -' # -- doesn't appear to be legal bash
@@ -75,7 +112,6 @@ _clean_history() {
 }
 # This can really mess with history expansion, e.g. `!!`.
 # But if you don't use history expansion, good way to constantly sync history:
-# PROMPT_COMMAND="_clean_history; $PROMPT_COMMAND"
 # Add history+grep shorthand
 function history() {
   _clean_history

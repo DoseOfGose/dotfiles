@@ -28,18 +28,8 @@
     - vim
     - yarn start
     - figlet idonate; figlet backend
-- name: Testing
-  keybind: C-f
-  session: my-sesh
-  window: my-win
-  layout: T
-  path: /Users/ericgose/Code/iDonate/giving-form
-  paneActions:
-    - vim
-    - yarn start
-    - giving-form
 - name: dotfiles vim
-  keybind: # No keybind
+  keybind: C-v
   session: config
   window: vim-lua
   layout: single-pane
@@ -47,7 +37,7 @@
   paneActions:
     - vim init.lua
 - name: dotfiles bashrc
-  keybind: # No keybind
+  keybind: C-b
   session: config
   window: bashrc
   layout: single-pane
@@ -55,7 +45,7 @@
   paneActions:
     - vim .bashrc
 - name: dotfiles tmux
-  keybind: # No keybind
+  keybind: C-t
   session: config
   window: tmux
   layout: single-pane

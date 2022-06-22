@@ -10,8 +10,11 @@
 --
 --  - Explore/Setup Keybindings for:
 --    - `gd` but opening in a new pane/make it easy to come back to original context
---    - C-z is captured in insert mode.  Would like that to suspend the process
+--  - C-z is captured in insert mode.  Would like that to suspend the process
 --
+--
+-- Links to check out:
+-- https://github.com/mg979/vim-visual-multi
 
 -- Plugins for vim-plug: https://github.com/junegunn/vim-plug 
 -- May consider converting to a lua-frendly format: https://dev.to/vonheikemen/neovim-using-vim-plug-in-lua-3oom
@@ -63,11 +66,15 @@ Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 " Make sure to also have ripgrep on system
 
+" Undo History Tree Viewing:
+Plug 'mbbill/undotree'
+
 " Some plugins to try?
 " Plug 'simrat39/symbols-outline.nvim'
 " Plug 'messenger'
-" 
 
+" Messenger for better git history viewing
+Plug 'rhysd/git-messenger.vim'
 
 " Top tab bar
 Plug 'romgrk/barbar.nvim'
@@ -75,11 +82,14 @@ Plug 'romgrk/barbar.nvim'
 " Treesitter
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
+" Get import costs
+Plug 'yardnsm/vim-import-cost', { 'do': 'npm install --production' }
+
+" This is a form of vim-devicons that also supports colors:
+Plug 'kyazdani42/nvim-web-devicons'
 " Ensure this loads _after_ NERDTree and airline
 " Uses a font with dev icons loaded to display unicode icons
 Plug 'ryanoasis/vim-devicons' " Make sure to have a patched font with file type glyphs: https://github.com/ryanoasis/nerd-fonts#patched-fonts
-" This is a form of vim-devicons that also supports colors:
-Plug 'kyazdani42/nvim-web-devicons'
 
 call plug#end()
 ]])
@@ -177,7 +187,7 @@ endif
 
  " Nerdtree
 nnoremap <silent> <Leader>b :NERDTreeToggle<CR>
-nnoremap <silent> <Leader>B :NERDTreeFind<CR>
+nnoremap <silent> <Leader>B :NERDTreeFind<CR> " Reveals file in NERDTree
 " Start NERDTree when Vim is started without file arguments.
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists('s:std_in') | NERDTree | endif
@@ -251,7 +261,7 @@ nmap <silent> ]g <Plug>(coc-diagnostic-next)
 nmap <leader>do <Plug>(coc-codeaction)
 " VSCode-esque symbol renaming for refactoring across a workspace:
 nmap <leader>rn <Plug>(coc-rename)
-nmap <leader>RN <Plug>(coc-
+" nmap <leader>RN <Plug>(coc- " What was I planning on binding to this..?
 
 " set filetypes as typescriptreact
 autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescriptreact
@@ -281,6 +291,9 @@ nnoremap <leader>tfs :lua require('telescope.builtin').grep_string()<CR>
 nnoremap <leader>tfif :lua require('telescope.builtin').current_buffer_fuzzy_find()<CR>
 " [T]elescope
 nnoremap <leader>tT :Telescope<CR>
+" [U]ndo Tree History
+nnoremap <leader>tu :UndotreeToggle<CR>
+
 
 " Easy resourcing of this file:
 command! Resource source ~/.config/nvim/init.lua 
@@ -413,6 +426,95 @@ require'nvim-treesitter.configs'.setup {
   }
 
 }
+
+-- BarBar setup
+-- See: https://github.com/romgrk/barbar.nvim
+local map = vim.api.nvim_set_keymap
+local opts = { noremap = true, silent = true }
+
+-- Replace normal gt/gT behavior to work with BarBar's entries
+-- Otherwise gt/gT would only target tabs but not buffers
+map('n', 'gT', ':BufferPrevious<CR>', opts)
+map('n', 'gt', ':BufferNext<CR>', opts)
+
+-- C-p to trigger buffer pick, where each buffer is hard assigned a 1 letter reference
+map('n', '<C-p>', ':BufferPick<CR>', opts)
+
+-- C-q as a "close" leader for BarBar (and some tangentially related bindings, like pinning)
+map('n', '<C-q>H', ':BufferCloseBuffersLeft<CR>', opts)
+map('n', '<C-q>L', ':BufferCloseBuffersRight<CR>', opts)
+map('n', '<C-q>p', ':BufferPin<CR>', opts)
+map('n', '<C-q>x', ':BufferClose<CR>', opts)
+map('n', '<C-q>X', ':BufferCloseAllButPinned<CR>', opts)
+
+-- Set barbar's options
+require'bufferline'.setup {
+  -- Enable/disable animations
+  animation = true,
+
+  -- Enable/disable auto-hiding the tab bar when there is a single buffer
+  auto_hide = false,
+
+  -- Enable/disable current/total tabpages indicator (top right corner)
+  tabpages = true,
+
+  -- Enable/disable close button
+  closable = true,
+
+  -- Enables/disable clickable tabs
+  --  - left-click: go to buffer
+  --  - middle-click: delete buffer
+  clickable = true,
+
+  -- Excludes buffers from the tabline
+  exclude_ft = {'javascript'},
+  exclude_name = {'package.json'},
+
+  -- Enable/disable icons
+  -- if set to 'numbers', will show buffer index in the tabline
+  -- if set to 'both', will show buffer index and icons in the tabline
+  icons = true,
+
+  -- If set, the icon color will follow its corresponding buffer
+  -- highlight group. By default, the Buffer*Icon group is linked to the
+  -- Buffer* group (see Highlighting below). Otherwise, it will take its
+  -- default value as defined by devicons.
+  icon_custom_colors = false,
+
+  -- Configure icons on the bufferline.
+  icon_separator_active = '▎',
+  icon_separator_inactive = '▎',
+  icon_close_tab = '',
+  icon_close_tab_modified = '●',
+  icon_pinned = '車',
+
+  -- If true, new buffers will be inserted at the start/end of the list.
+  -- Default is to insert after current buffer.
+  insert_at_end = false,
+  insert_at_start = false,
+
+  -- Sets the maximum padding width with which to surround each tab
+  maximum_padding = 1,
+
+  -- Sets the maximum buffer name length.
+  maximum_length = 30,
+
+  -- If set, the letters for each buffer in buffer-pick mode will be
+  -- assigned based on their name. Otherwise or in case all letters are
+  -- already assigned, the behavior is to assign letters in order of
+  -- usability (see order below)
+  semantic_letters = true,
+
+  -- New buffer letters are assigned in this order. This order is
+  -- optimal for the qwerty keyboard layout but might need adjustement
+  -- for other layouts.
+  letters = 'asdfjkl;ghnmxcvbziowerutyqpASDFJKLGHNMXCVBZIOWERUTYQP',
+
+  -- Sets the name of unnamed buffers. By default format is "[Buffer X]"
+  -- where X is the buffer number. But only a static string is accepted here.
+  no_name_title = nil,
+}
+
 
 -- local dap = require('dap')
 -- dap.adapters.node2 = {

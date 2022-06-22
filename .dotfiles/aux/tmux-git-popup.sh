@@ -171,6 +171,12 @@ main() {
     git_yarn_test)
       open_popup_if_not_git_session "yarn test"
       ;;
+    git_checkout_fzf)
+      open_popup_if_not_git_session '$git checkout $($git branch -r | sed 's/origin\///' | fzf)'
+      ;;
+    git_reset_hard_no_cr)
+      open_popup_if_not_git_session "$git reset --hard HEAD" false
+      ;;
     toggle_popup)
       toggle_popup
       ;;

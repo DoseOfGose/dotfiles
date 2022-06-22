@@ -6,7 +6,7 @@ projects_yaml="/Users/ericgose/.dotfiles/aux/tmux/projects.yaml"
 fzf_preview() {
   local name=$1
   local yaml_path=$2
-  yq ".[] | select(.name == \"$name\")" "$yaml_path"
+  yq ".[] | select(.name == \"$name\")" "$yaml_path" | bat -l yaml --color always --style plain
   # local session=$(get_prop_from_yaml "$name" ".session")
   # local window=$(get_prop_from_yaml "$name" ".window")
   # local layout=$(get_prop_from_yaml "$name" ".layout")
@@ -62,6 +62,7 @@ apply_layout() {
   if [ "$layout" = "T" ]; then
     tmux split-window -v -l 20% -t "$session":"$window" -c $path
     tmux split-window -h -l 45% -t "$session":"$window" -c $path
+    tmux select-pane -t "$session":"$window".1
   elif [ "$layout" = "side-by-side" ]; then
     tmux split-window -h -l 50% -t "$session":"$window" -c $path
   # elif [ "$layout" = "single-pane"; then
