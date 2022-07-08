@@ -1,5 +1,15 @@
 #!/bin/bash
 
+check_if_popup_and_exit_if_it_is() {
+  local sessionPrefix="git-popup-"
+  local currSession=$(tmux display-message -p '#S')
+  if [[ "$currSession" == ${sessionPrefix}* ]]; then
+    # Temporary fix - this prevents switching the git-popup to the target project
+    # Later I would like this to target the correct client
+    exit
+  fi
+}
+
 # Projects yaml file
 projects_yaml="/Users/ericgose/.dotfiles/aux/tmux/projects.yaml"
 
@@ -37,6 +47,7 @@ get_prop_from_yaml() {
 
 export -f get_prop_from_yaml
 
+
 switch_to_or_create_session_and_window() {
   local path=$1
   local status=$(tmux switch-client -t "$session":"$window" 2>&1 \
@@ -60,12 +71,43 @@ apply_layout() {
   local path=$2
 
   if [ "$layout" = "T" ]; then
+    # T - One pane on top, two panes on bottom
+    # ----------
+    # |        |
+    # |   1    |
+    # ----------
+    # | 2  | 3 |
+    # ----------
     tmux split-window -v -l 20% -t "$session":"$window" -c $path
     tmux split-window -h -l 45% -t "$session":"$window" -c $path
     tmux select-pane -t "$session":"$window".1
   elif [ "$layout" = "side-by-side" ]; then
+    # side-by-side - Two panes, one to the left and one to the right
+    # ----------
+    # |   |    |
+    # | 1 | 2  |
+    # |   |    |
+    # ----------
     tmux split-window -h -l 50% -t "$session":"$window" -c $path
+    tmux select-pane -t "$session":"$window".1
+  elif [ "$layout" = "=" ]; then
+    # = - Two panes, one on top and one on bottom
+    # ----------
+    # |        |
+    # |   1    |
+    # ----------
+    # |        |
+    # |   2    |
+    # ----------
+    tmux split-window -v -l 20% -t "$session":"$window" -c $path
+    tmux select-pane -t "$session":"$window".1
   # elif [ "$layout" = "single-pane"; then
+    # single-pane (default) - One pane only
+    # ----------
+    # |        |
+    # |   1    |
+    # |        |
+    # ----------
     # No need to do anything
   fi
 
@@ -164,15 +206,15 @@ apply_adhoc_binding() {
 show_help_menu() {
    $(tmux display-menu -T "#[align=centre fg=green]Custom Projects Menu" \
     "" \
-    "-#[nodim align=centre fg=blue]by doseofgose" "" "" \
-    "-#[nodim align=centre]<TmuxProjectsLeader> is C-p" "" "" \
+    "-#[nodim align=centre fg=blue]by doseofgose"       ""    "" \
+    "-#[nodim align=centre]<TmuxProjectsLeader> is C-p" ""    "" \
     "" \
-    "Show Project Select Popup"          C-l       "" \
-    "Jump to project keybind (Keybind)"          ""       "" \
-    "Set current window as jump point (q/w/e/r)"          ""      "" \
-    "Go to dynamic jump C-(q/w/e/r)"          ""      "" \
+    "Show Project Select Popup"                         C-l   "" \
+    "Jump to project keybind (Keybind)"                 ""    "" \
+    "Set current window as jump point (q/w/e/r)"        ""    "" \
+    "Go to dynamic jump C-(q/w/e/r)"                    ""    "" \
     "" \
-    "Open/Close this help menu"                         ?         "" \
+    "Open/Close this help menu"                         ?     "" \
   )
 }
 
@@ -187,15 +229,18 @@ main() {
 
   case "$cmd" in
     project_launcher_popup)
+      check_if_popup_and_exit_if_it_is
       project_launcher_popup
       ;;
     project_launcher)
+      check_if_popup_and_exit_if_it_is
       project_launcher
       ;;
     apply_project_bindings)
       apply_project_bindings
       ;;
     quick_launch_binding)
+      check_if_popup_and_exit_if_it_is
       local keybind=$2
       quick_launch_binding $keybind
       ;;
@@ -204,6 +249,7 @@ main() {
       apply_adhoc_binding
       ;;
     show_help_menu)
+      check_if_popup_and_exit_if_it_is
       show_help_menu
       ;;
     # clear_all_adhoc_bindings)

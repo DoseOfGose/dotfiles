@@ -1,7 +1,7 @@
 # Bash customizations
 
 # Add custom scripts folder locations to PATH
-export PATH="~/Code/System/Scripts:~/go/bin:/usr/local/bin:$PATH"
+export PATH="/opt/homebrew/bin/:~/Code/System/Scripts:~/go/bin:/usr/local/bin:$PATH"
 
 # Use vi keybindings instead of emacs style
 set -o vi
@@ -53,12 +53,19 @@ PS2="${PS_GREEN}${PS2_PREFIX} ${PS_COLOR_RESET}"
 prompt_command() {
   # $? is 0 if git dir, otherwise false
   if git status > /dev/null 2>&1; then
+    # Yay, overengineering:
     local DYNAMIC_FIELDS_USED="\u \h \W"
     local STATIC_LENGTH=22
     local FIELD_LENGTH=$(echo ${DYNAMIC_FIELDS_USED@P} | wc -c)
     local TERM_LENGTH=$(tput cols)
     local AVAIL_CHARS=$(expr $TERM_LENGTH - $FIELD_LENGTH - $STATIC_LENGTH)
-    local GIT_STATUS=$(git status | grep 'On branch' | cut -b 11- | sed 's/\(.\{'"$AVAIL_CHARS"'\}\).*/\1.../')
+    local GIT_STATUS_FULL=$(git status | grep 'On branch' | cut -b 11-)
+    local GIT_STATUS_FULL_LENGTH=$(echo $GIT_STATUS_FULL | wc -c)
+    local GIT_STATUS
+    if [ "$GIT_STATUS_FULL_LENGTH" -gt "$AVAIL_CHARS" ]; then
+      AVAIL_CHARS=$(expr $AVAIL_CHARS - 3)
+    fi
+    GIT_STATUS=$(echo $GIT_STATUS_FULL | sed 's/\(.\{'"$AVAIL_CHARS"'\}\).*/\1.../')
     export PS1_GIT=" "$'\ue725'" ${GIT_STATUS}"
   else
     export PS1_GIT=""

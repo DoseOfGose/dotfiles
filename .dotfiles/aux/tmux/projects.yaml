@@ -65,7 +65,15 @@
   keybind: # No keybind
   session: config
   window: git-popup
-  layout: singe-pane
+  layout: single-pane
   path: /Users/ericgose/.dotfiles/aux
   paneActions:
-    - vim tmux-git-popup.sh
+- name: learn go with testing
+  keybind: C-g
+  session: projects
+  window: go-w-test
+  layout: =
+  path: /Users/ericgose/Code/System/go-test
+  paneActions:
+    - vim
+    - figlet golang

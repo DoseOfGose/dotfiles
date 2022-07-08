@@ -91,6 +91,9 @@ Plug 'kyazdani42/nvim-web-devicons'
 " Uses a font with dev icons loaded to display unicode icons
 Plug 'ryanoasis/vim-devicons' " Make sure to have a patched font with file type glyphs: https://github.com/ryanoasis/nerd-fonts#patched-fonts
 
+" Trying out copilot
+Plug 'github/copilot.vim'
+
 call plug#end()
 ]])
 
@@ -291,6 +294,8 @@ nnoremap <leader>tfs :lua require('telescope.builtin').grep_string()<CR>
 nnoremap <leader>tfif :lua require('telescope.builtin').current_buffer_fuzzy_find()<CR>
 " [T]elescope
 nnoremap <leader>tT :Telescope<CR>
+" Testing out using <leader>T as the permanent hotkey for telescope?
+nnoremap <leader>T :Telescope<CR>
 " [U]ndo Tree History
 nnoremap <leader>tu :UndotreeToggle<CR>
 
@@ -421,6 +426,7 @@ require('gitsigns').setup {
 
 require'nvim-treesitter.configs'.setup {
   ensure_installed = "all",
+  ignore_install = { "phpdoc" },
   highlight = {
     enable = true
   }
