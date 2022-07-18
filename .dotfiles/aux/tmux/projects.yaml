@@ -68,6 +68,7 @@
   layout: single-pane
   path: /Users/ericgose/.dotfiles/aux
   paneActions:
+    - vim tmux-git-popup.sh
 - name: learn go with testing
   keybind: C-g
   session: projects
@@ -77,3 +78,31 @@
   paneActions:
     - vim
     - figlet golang
+- name: di-web
+  keybind: # No keybind
+  session: projects
+  window: di-web
+  layout: T
+  path: /Users/ericgose/Code/System/di-web/web
+  paneActions:
+    - vim
+    - yarn rw dev web
+    - figlet di-web
+- name: di-api
+  keybind: # No keybind
+  session: projects
+  window: di-api
+  layout: T
+  path: /Users/ericgose/Code/System/di-web/api
+  paneActions:
+    - vim
+    - yarn rw dev api
+    - figlet di-api
+- name: di-root
+  keybind: # No keybind
+  session: projects
+  window: di-root
+  layout: single-pane
+  path: /Users/ericgose/Code/System/di-web
+  paneActions:
+    - vim

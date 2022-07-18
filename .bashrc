@@ -65,8 +65,13 @@ prompt_command() {
     if [ "$GIT_STATUS_FULL_LENGTH" -gt "$AVAIL_CHARS" ]; then
       AVAIL_CHARS=$(expr $AVAIL_CHARS - 3)
     fi
-    GIT_STATUS=$(echo $GIT_STATUS_FULL | sed 's/\(.\{'"$AVAIL_CHARS"'\}\).*/\1.../')
-    export PS1_GIT=" "$'\ue725'" ${GIT_STATUS}"
+    if [ "$AVAIL_CHARS" -lt 1 ]; then
+      # TODO: figure out some better handling here - this is just to prevent status going to 2x lines
+      export PS1_GIT=" "$'\ue725'"*"
+    else
+      GIT_STATUS=$(echo $GIT_STATUS_FULL | sed 's/\(.\{'"$AVAIL_CHARS"'\}\).*/\1.../')
+      export PS1_GIT=" "$'\ue725'" ${GIT_STATUS}"
+    fi
   else
     export PS1_GIT=""
   fi

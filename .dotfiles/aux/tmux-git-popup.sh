@@ -84,6 +84,19 @@ project_dir_lookup() {
           ;;
       esac
       ;;
+    projects)
+      case "$window_name" in
+        di-web)
+          echo '~/Code/System/di-web'
+          ;;
+        di-api)
+          echo '~/Code/System/di-web'
+          ;;
+        *)
+          echo "$pane_path"
+          ;;
+      esac
+      ;;
     *) echo "$pane_path"
   esac
 }
